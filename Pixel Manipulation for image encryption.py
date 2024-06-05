@@ -57,55 +57,59 @@ def load_secret_key(key_path):
     with open(key_path, 'r') as f:
         return f.read().strip()
 
-# Get the image path from the user
-image_path = input("Enter the image path: ")
-
-# Define the key path
-key_path = "secret_key.txt"
-
-# Encrypt the image
-encrypted_image, permutation = encrypt_image(image_path)
-
-# Generate and save the secret key
-secret_key = generate_secret_key()
-save_secret_key(secret_key, key_path)
-
-# Display options to the user
 while True:
-    print("\nChoose an option to display the image:")
-    print("1: Original Image")
-    print("2: Encrypted Image")
-    print("3: Decrypted Image")
-    print("4: Terminate")
-    option = int(input("Enter your choice (1, 2, 3, or 4): "))
-
-    if option == 1:
-        original_image = Image.open(image_path)
-        plt.imshow(original_image)
-        plt.title("Original Image")
-        plt.axis('off')
-        plt.show()
-    elif option == 2:
-        plt.imshow(encrypted_image)
-        plt.title("Encrypted Image")
-        plt.axis('off')
-        plt.show()
-    elif option == 3:
-        entered_key = input("Enter the secret key to decrypt the image: ")
-        try:
-            saved_secret_key = load_secret_key(key_path)
-            if entered_key == saved_secret_key:
-                decrypted_image = decrypt_image(encrypted_image, permutation)
-                plt.imshow(decrypted_image)
-                plt.title("Decrypted Image")
-                plt.axis('off')
-                plt.show()
-            else:
-                print("Incorrect key! Unable to decrypt the image.")
-        except Exception as e:
-            print(f"Error loading the key: {e}")
-    elif option == 4:
-        print("Terminating the program.")
+    # Get the image path from the user
+    image_path = input("\nEnter the image path (or 'q' to quit): ")
+    if image_path.lower() == 'q':
+        print("Exiting the program.")
         break
-    else:
-        print("Invalid option! Please try again.")
+    
+    # Define the key path
+    key_path = "secret_key.txt"
+
+    # Encrypt the image
+    encrypted_image, permutation = encrypt_image(image_path)
+
+    # Generate and save the secret key
+    secret_key = generate_secret_key()
+    save_secret_key(secret_key, key_path)
+
+    # Display options to the user
+    while True:
+        print("\nChoose an option to display the image:")
+        print("1: Original Image")
+        print("2: Encrypted Image")
+        print("3: Decrypted Image")
+        print("4: Terminate")
+        option = int(input("Enter your choice (1, 2, 3, or 4): "))
+
+        if option == 1:
+            original_image = Image.open(image_path)
+            plt.imshow(original_image)
+            plt.title("Original Image")
+            plt.axis('off')
+            plt.show()
+        elif option == 2:
+            plt.imshow(encrypted_image)
+            plt.title("Encrypted Image")
+            plt.axis('off')
+            plt.show()
+        elif option == 3:
+            entered_key = input("Enter the secret key to decrypt the image: ")
+            try:
+                saved_secret_key = load_secret_key(key_path)
+                if entered_key == saved_secret_key:
+                    decrypted_image = decrypt_image(encrypted_image, permutation)
+                    plt.imshow(decrypted_image)
+                    plt.title("Decrypted Image")
+                    plt.axis('off')
+                    plt.show()
+                else:
+                    print("Incorrect key! Unable to decrypt the image.")
+            except Exception as e:
+                print(f"Error loading the key: {e}")
+        elif option == 4:
+            print("Terminating the program.")
+            exit()
+        else:
+            print("Invalid option! Please try again.")
